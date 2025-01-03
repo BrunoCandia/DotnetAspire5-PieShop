@@ -15,7 +15,7 @@ builder.AddServiceDefaults();
 // Add services related to ASP.NET Core MVC to the container.
 builder.Services.AddControllersWithViews();
 
-// To use the pages realted to Identity (Login, Register) we need to add the service related to razor pages because they were done with Razor
+// To use the pages related to Identity (Login, Register) we need to add the service related to razor pages because they were done with Razor
 builder.Services.AddRazorPages();
 
 builder.Services.AddOutputCache(options =>
