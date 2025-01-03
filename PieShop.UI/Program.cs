@@ -1,10 +1,16 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using PieShop.BusinessLogic;
 using PieShop.DataAccess;
 using PieShop.DataAccess.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddSqlServerDbContext<PieShopContext>("PieShop");
+
+// Identity will use Entity Framework
+builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<PieShopContext>();
+
+builder.AddServiceDefaults();
 
 // Add services related to ASP.NET Core MVC to the container.
 builder.Services.AddControllersWithViews();
@@ -18,22 +24,18 @@ builder.Services.AddOutputCache(options =>
     options.AddPolicy("PieDetail", policy => policy.SetVaryByRouteValue("pieId").Expire(TimeSpan.FromSeconds(60)));
 });
 
-builder.Services.AddStackExchangeRedisOutputCache(options =>
-{
-    options.Configuration = "localhost:59163"; // Update the value after running Redis with Podman: Container image "docker.io/library/redis:7.4"
-});
+////builder.Services.AddStackExchangeRedisOutputCache(options =>
+////{
+////    options.Configuration = "localhost:59163"; // Update the value after running Redis with Podman: Container image "docker.io/library/redis:7.4"
+////});
+
+builder.AddRedisOutputCache("outputcache");
 
 // https://redis.io/docs/latest/commands/command-getkeys/#:~:text=You%20can%20use%20COMMAND%20GETKEYS,how%20Redis%20parses%20the%20commands.
 // https://www.atlassian.com/data/admin/how-to-get-all-keys-in-redis
 
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddDbContext<PieShopContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-// Identity will use Entity Framework
-builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<PieShopContext>();
-////builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<PieShopContext>();
 
 builder.Services.AddScoped<IPieRepository, PieRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -46,6 +48,8 @@ builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 app.UseSession();
 

@@ -13,6 +13,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PieShop.Models", "PieShop.M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PieShop.Initialization", "PieShop.Initialization\PieShop.Initialization.csproj", "{8ACA0948-237A-4FA3-8853-BDFBA2188D2C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PieShop.AppHost", "PieShop.AppHost\PieShop.AppHost.csproj", "{B3D4D5BC-1B2B-49C0-8276-7D1EFC931914}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PieShop.ServiceDefaults", "PieShop.ServiceDefaults\PieShop.ServiceDefaults.csproj", "{D574BBB6-6E88-4A8C-8ADA-39EA502C50D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PieShop.Database.Initialization", "PieShop.Database.Initialization\PieShop.Database.Initialization.csproj", "{778CF66F-EC3B-4FED-A47E-DB9CAB4CE3DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +45,18 @@ Global
 		{8ACA0948-237A-4FA3-8853-BDFBA2188D2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8ACA0948-237A-4FA3-8853-BDFBA2188D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8ACA0948-237A-4FA3-8853-BDFBA2188D2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3D4D5BC-1B2B-49C0-8276-7D1EFC931914}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3D4D5BC-1B2B-49C0-8276-7D1EFC931914}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3D4D5BC-1B2B-49C0-8276-7D1EFC931914}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3D4D5BC-1B2B-49C0-8276-7D1EFC931914}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D574BBB6-6E88-4A8C-8ADA-39EA502C50D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D574BBB6-6E88-4A8C-8ADA-39EA502C50D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D574BBB6-6E88-4A8C-8ADA-39EA502C50D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D574BBB6-6E88-4A8C-8ADA-39EA502C50D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{778CF66F-EC3B-4FED-A47E-DB9CAB4CE3DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{778CF66F-EC3B-4FED-A47E-DB9CAB4CE3DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{778CF66F-EC3B-4FED-A47E-DB9CAB4CE3DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{778CF66F-EC3B-4FED-A47E-DB9CAB4CE3DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
