@@ -1,5 +1,3 @@
-using Microsoft.Extensions.Hosting;
-
 var builder = DistributedApplication.CreateBuilder(args);
 
 #region Redis Cache
@@ -22,13 +20,9 @@ var sqlServer = builder.AddSqlServer("sqlServer", password: sqlPassword)
 
 IResourceBuilder<ProjectResource>? databaseInitialization = null;
 
-// TODO: verify what happens when deployed
-if (builder.Environment.IsDevelopment())
-{
-    databaseInitialization = builder.AddProject<Projects.PieShop_Database_Initialization>("pieshop-database-initialization")
-        .WithReference(sqlServer)
-        .WaitFor(sqlServer);
-}
+databaseInitialization = builder.AddProject<Projects.PieShop_Database_Initialization>("pieshop-database-initialization")
+    .WithReference(sqlServer)
+    .WaitFor(sqlServer);
 
 #endregion
 
