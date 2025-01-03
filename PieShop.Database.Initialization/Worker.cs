@@ -113,10 +113,17 @@ public class Worker : BackgroundService
 
         await strategy.ExecuteAsync(async () =>
         {
-            // https://github.com/dotnet/efcore/issues/35127
-            ////await using var transaction = await pieShopContext.Database.BeginTransactionAsync();
-            await pieShopContext.Database.MigrateAsync();
-            ////await transaction.CommitAsync();
+            if ((await pieShopContext.Database.GetPendingMigrationsAsync()).Any())
+            {
+                Console.WriteLine("Applying migrations");
+
+                // https://github.com/dotnet/efcore/issues/35127
+                ////await using var transaction = await pieShopContext.Database.BeginTransactionAsync();
+                await pieShopContext.Database.MigrateAsync();
+                ////await transaction.CommitAsync();
+
+                Console.WriteLine("Applied migrations");
+            }
         });
     }
 
