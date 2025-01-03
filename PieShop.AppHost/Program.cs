@@ -34,7 +34,8 @@ builder.AddProject<Projects.PieShop_UI>("pieshop-ui")
     .WithReference(sqlServer)
     .WaitFor(sqlServer)
     .WithReference(databaseInitialization!)
-    .WaitFor(databaseInitialization!);
+    .WaitFor(databaseInitialization!)
+    .WithExternalHttpEndpoints();
 
 #endregion
 
