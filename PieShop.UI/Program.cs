@@ -79,22 +79,56 @@ app.MapStaticAssets();
 ////    .WithStaticAssets();
 
 // The order matters. The middleware to support MVC routing
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
+////app.UseEndpoints(endpoints =>
+////{
+////    endpoints.MapControllerRoute(
+////        name: "pieList",
+////        pattern: "pie/{action=List}",
+////        defaults: new { controller = "pie" });
+
+////    endpoints.MapControllerRoute(
+////        name: "pieDetail",
+////        pattern: "pie/{action=Detail}/{pieId}",
+////        defaults: new { controller = "pie" });
+
+////    endpoints.MapControllerRoute(
+////        name: "orderCheckout",
+////        pattern: "order/{action=Checkout}",
+////        defaults: new { controller = "order" });
+
+////    endpoints.MapControllerRoute(
+////        name: "orderCheckoutCompleted",
+////        pattern: "order/{action=CheckoutCompleted}",
+////        defaults: new { controller = "order" });
+
+////    endpoints.MapControllerRoute(
+////        name: "default",
+////        pattern: "{controller=Home}/{action=Index}/{id?}");
+////});
+
+app.MapControllerRoute(
         name: "pieList",
         pattern: "pie/{action=List}",
         defaults: new { controller = "pie" });
 
-    endpoints.MapControllerRoute(
-        name: "pieDetail",
-        pattern: "pie/{action=Detail}/{pieId}",
-        defaults: new { controller = "pie" });
+app.MapControllerRoute(
+    name: "pieDetail",
+    pattern: "pie/{action=Detail}/{pieId}",
+    defaults: new { controller = "pie" });
 
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-});
+app.MapControllerRoute(
+    name: "orderCheckout",
+    pattern: "order/{action=Checkout}",
+    defaults: new { controller = "order" });
+
+app.MapControllerRoute(
+    name: "orderCheckoutCompleted",
+    pattern: "order/{action=CheckoutCompleted}",
+    defaults: new { controller = "order" });
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 // To use the pages realted to Identity (Login, Register) we need to add the routing to support Razor routing
 app.MapRazorPages();

@@ -119,7 +119,7 @@ public class Worker : BackgroundService
         {
             if ((await pieShopContext.Database.GetPendingMigrationsAsync()).Any())
             {
-                Console.WriteLine("Applying migrations");
+                Console.WriteLine("Applying Migrations");
 
                 // https://github.com/dotnet/efcore/issues/35127
                 ////await using var transaction = await pieShopContext.Database.BeginTransactionAsync();
@@ -147,7 +147,7 @@ public class Worker : BackgroundService
 
     private static async Task SeedBaseAsync(PieShopContext pieShopContext)
     {
-        Console.WriteLine("Seeding data...");
+        Console.WriteLine("Seeding Data...");
 
         if (!await pieShopContext.Category.AnyAsync())
         {

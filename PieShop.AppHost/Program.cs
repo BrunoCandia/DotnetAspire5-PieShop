@@ -18,6 +18,7 @@ var sqlServer = builder.AddSqlServer("sqlServer", password: sqlPassword, port: 5
 
 #region Database Initialization
 
+// This should not be run in prod env
 IResourceBuilder<ProjectResource>? databaseInitialization = null;
 
 databaseInitialization = builder.AddProject<Projects.PieShop_Database_Initialization>("pieshop-database-initialization")
