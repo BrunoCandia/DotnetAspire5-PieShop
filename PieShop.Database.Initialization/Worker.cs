@@ -63,10 +63,8 @@ public class Worker : BackgroundService
 
         try
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                await InitializeDatabaseAsync();
-            }
+            // For reference see: https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/applying?tabs=dotnet-core-cli
+            await InitializeDatabaseAsync();
         }
         catch (Exception ex)
         {
@@ -90,6 +88,7 @@ public class Worker : BackgroundService
 
         await RunMigrationsAsync(pieShopContext);
 
+        // TODO: Seed the DB in a separate process.
         await SeedDatabaseAsync(pieShopContext);
     }
 
@@ -114,6 +113,7 @@ public class Worker : BackgroundService
 
         await strategy.ExecuteAsync(async () =>
         {
+            // https://github.com/dotnet/efcore/issues/35127
             ////await using var transaction = await pieShopContext.Database.BeginTransactionAsync();
             await pieShopContext.Database.MigrateAsync();
             ////await transaction.CommitAsync();
@@ -126,6 +126,7 @@ public class Worker : BackgroundService
 
         await strategy.ExecuteAsync(async () =>
         {
+            // https://github.com/dotnet/efcore/issues/35127
             ////await using var transaction = await pieShopContext.Database.BeginTransactionAsync();
             await SeedBaseAsync(pieShopContext);
             await pieShopContext.SaveChangesAsync();
