@@ -10,7 +10,7 @@ var cache = builder.AddRedis("outputcache")
 #region SQL Server Database
 
 var sqlPassword = builder.AddParameter("sqlPassword", secret: true);
-var sqlServer = builder.AddSqlServer("sqlServer", password: sqlPassword, port: 56043)
+var sqlServer = builder.AddSqlServer("sql-server", password: sqlPassword, port: 56043)
     .WithDataVolume()
     .AddDatabase("PieShop");
 
