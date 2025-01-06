@@ -75,6 +75,8 @@ public class Worker : BackgroundService
             throw;
         }
 
+        _logger.LogInformation("Worker stopping at: {Time}", DateTimeOffset.UtcNow);
+
         _hostApplicationLifetime.StopApplication();
     }
 
