@@ -64,7 +64,7 @@ Func<ExecuteCommandContext, Task<ExecuteCommandResult>> myFunc = async (context)
 };
 
 var sqlPassword = builder.AddParameter("sqlPassword", secret: true);
-var sqlServer = builder.AddSqlServer("sql-server", password: sqlPassword, port: 1433)
+var sqlServer = builder.AddSqlServer("sql-server", password: sqlPassword, port: 56043)
     .WithDataVolume()
 ////    .WithCommand("setOwnership", "SetOwnership", myFunc)
     .AddDatabase("PieShop");
