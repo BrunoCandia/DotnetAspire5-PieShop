@@ -19,6 +19,7 @@ namespace PieShop.DataAccess
         public DbSet<ShoppingCartItem> ShoppingCartItem { get; set; }
         public DbSet<Order> Order { get; set; }
         public DbSet<OrderDetail> OrderDetail { get; set; }
+        public DbSet<Ingredient> Ingredient { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

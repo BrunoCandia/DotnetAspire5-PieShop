@@ -7,8 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddSqlServerDbContext<PieShopContext>("PieShop");
 
-// Identity will use Entity Framework
-builder.Services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<PieShopContext>();
+// Identity will use Entity Framework and adds authentication by default
+builder.Services.AddDefaultIdentity<IdentityUser>().AddRoles<IdentityRole>().AddEntityFrameworkStores<PieShopContext>();
+
+builder.Services.AddAuthorization(policy =>
+{
+    policy.AddPolicy("IsAdministrator", policy => policy.RequireRole("Administrator"));
+});
 
 builder.AddServiceDefaults();
 
@@ -31,6 +36,8 @@ builder.Services.AddOutputCache(options =>
 
 builder.AddRedisOutputCache("outputcache");
 
+// Cached responses are stored in Redis
+// https://learn.microsoft.com/en-us/aspnet/core/performance/caching/output?view=aspnetcore-9.0
 // https://redis.io/docs/latest/commands/command-getkeys/#:~:text=You%20can%20use%20COMMAND%20GETKEYS,how%20Redis%20parses%20the%20commands.
 // https://www.atlassian.com/data/admin/how-to-get-all-keys-in-redis
 
@@ -46,6 +53,7 @@ builder.Services.AddScoped<IPieService, PieService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 var app = builder.Build();
 

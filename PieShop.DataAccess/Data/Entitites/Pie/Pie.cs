@@ -19,6 +19,7 @@ namespace PieShop.DataAccess.Data.Entitites.Pie
         public Guid CategoryId { get; set; }
         ////public required Category.Category Category { get; set; }
         public Category.Category Category { get; set; } = default!;
+        public List<Ingredient>? Ingredients { get; set; }
 
         public class PieEntity : IEntityTypeConfiguration<Pie>
         {

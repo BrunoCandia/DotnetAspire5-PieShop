@@ -1,0 +1,44 @@
+﻿@using PieShop.Models.User
+@model IEnumerable<UserWithRoles>
+
+<h1>Users</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    @if (user.Roles.Any())
+                    {
+                        @string.Join(", ", user.Roles)
+                    }
+                    else
+                    {
+                        <span>No Roles Assigned</span>
+                    }
+                </td>
+                <td>
+                    @* <a href="@Url.Action("AddRole", "User", new { userId = user.UserId })" class="btn btn-primary btn-sm">Add Role</a>
+                    @foreach (var role in user.Roles)
+                    {
+                        <form method="post" action="@Url.Action("RemoveRole", "User")" style="display:inline;">
+                            <input type="hidden" name="userId" value="@user.UserId" />
+                            <input type="hidden" name="roleName" value="@role" />
+                            <button type="submit" class="btn btn-danger btn-sm">Remove @role</button>
+                        </form>
+                    } *@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
