@@ -40,7 +40,8 @@ namespace PieShop.DataAccess.Repositories
                     {
                         CategoryId = pie.Category.CategoryId,
                         Name = pie.Category.Name
-                    }
+                    },
+                    RowVersion = pie.RowVersion
                 })
                 .FirstOrDefaultAsync();
         }
@@ -276,6 +277,7 @@ namespace PieShop.DataAccess.Repositories
             if (pieToUpdate != null)
             {
                 ////_pieShopContext.Entry(pieToUpdate).Property("RowVersion").OriginalValue = pie.RowVersion;
+                _pieShopContext.Entry(pieToUpdate).Property(nameof(PieEntity.RowVersion)).OriginalValue = pie.RowVersion;
 
                 pieToUpdate.CategoryId = pie.CategoryId;
                 pieToUpdate.ShortDescription = pie.ShortDescription;

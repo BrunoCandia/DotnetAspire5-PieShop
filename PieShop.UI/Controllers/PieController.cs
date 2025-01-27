@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.EntityFrameworkCore;
 using PieShop.BusinessLogic;
 using PieShop.Models.Pie;
 using PieShop.UI.Models;
@@ -230,8 +231,15 @@ namespace PieShop.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(Pie pie)
         {
+            var pieToUpdate = await _pieService.GetPieByPieIdAsync(pie.PieId);
+
             try
             {
+                if (pieToUpdate == null)
+                {
+                    ModelState.AddModelError(string.Empty, "The pie you want to update doesn't exist or was already deleted by someone else.");
+                }
+
                 if (ModelState.IsValid)
                 {
                     await _pieService.UpdatePieAsync(pie);
@@ -241,6 +249,68 @@ namespace PieShop.UI.Controllers
                 else
                 {
                     return BadRequest();
+                }
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                var exceptionPie = ex.Entries.Single();
+                var entityValues = (Pie)exceptionPie.Entity;
+                var databasePie = await exceptionPie.GetDatabaseValuesAsync();
+
+                if (databasePie == null)
+                {
+                    ModelState.AddModelError(string.Empty, "The pie was already deleted by another user.");
+                }
+                else
+                {
+                    var databaseValues = (Pie)databasePie.ToObject();
+
+                    if (databaseValues.Name != entityValues.Name)
+                    {
+                        ModelState.AddModelError("Pie.Name", $"Current value: {databaseValues.Name}");
+                    }
+                    if (databaseValues.Price != entityValues.Price)
+                    {
+                        ModelState.AddModelError("Pie.Price", $"Current value: {databaseValues.Price:c}");
+                    }
+                    if (databaseValues.ShortDescription != entityValues.ShortDescription)
+                    {
+                        ModelState.AddModelError("Pie.ShortDescription", $"Current value: {databaseValues.ShortDescription}");
+                    }
+                    if (databaseValues.LongDescription != entityValues.LongDescription)
+                    {
+                        ModelState.AddModelError("Pie.LongDescription", $"Current value: {databaseValues.LongDescription}");
+                    }
+                    if (databaseValues.AllergyInformation != entityValues.AllergyInformation)
+                    {
+                        ModelState.AddModelError("Pie.AllergyInformation", $"Current value: {databaseValues.AllergyInformation}");
+                    }
+                    if (databaseValues.ImageThumbnailUrl != entityValues.ImageThumbnailUrl)
+                    {
+                        ModelState.AddModelError("Pie.ImageThumbnailUrl", $"Current value: {databaseValues.ImageThumbnailUrl}");
+                    }
+                    if (databaseValues.ImageUrl != entityValues.ImageUrl)
+                    {
+                        ModelState.AddModelError("Pie.ImageUrl", $"Current value: {databaseValues.ImageUrl}");
+                    }
+                    if (databaseValues.IsPieOfTheWeek != entityValues.IsPieOfTheWeek)
+                    {
+                        ModelState.AddModelError("Pie.IsPieOfTheWeek", $"Current value: {databaseValues.IsPieOfTheWeek}");
+                    }
+                    if (databaseValues.IsInStock != entityValues.IsInStock)
+                    {
+                        ModelState.AddModelError("Pie.InStock", $"Current value: {databaseValues.IsInStock}");
+                    }
+                    if (databaseValues.CategoryId != entityValues.CategoryId)
+                    {
+                        ModelState.AddModelError("Pie.CategoryId", $"Current value: {databaseValues.CategoryId}");
+                    }
+
+                    ModelState.AddModelError(string.Empty, "The pie was modified already by another user. The database values are now shown. Hit Save again to store these values.");
+
+                    pieToUpdate!.RowVersion = databaseValues.RowVersion;
+
+                    ModelState.Remove("Pie.RowVersion");
                 }
             }
             catch (Exception ex)
