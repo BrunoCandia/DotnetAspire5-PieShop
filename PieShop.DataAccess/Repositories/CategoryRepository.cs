@@ -13,6 +13,8 @@ namespace PieShop.DataAccess.Repositories
         private readonly PieShopContext _pieShopContext;
         private readonly IOutputCacheStore _outputCacheStore;
 
+        private readonly string[] _tagsArray = new string[] { allCategoriesCacheKey };
+
         const string allCategoriesCacheKey = "allCategories";
 
         public CategoryRepository(PieShopContext pieShopContext, IOutputCacheStore outputCacheStore)
@@ -47,7 +49,7 @@ namespace PieShop.DataAccess.Repositories
 
             var encodedCategories = Encoding.UTF8.GetBytes(serializedCategories);
 
-            await _outputCacheStore.SetAsync(allCategoriesCacheKey, encodedCategories, null, TimeSpan.FromSeconds(60), CancellationToken.None);
+            await _outputCacheStore.SetAsync(allCategoriesCacheKey, encodedCategories, _tagsArray, TimeSpan.FromSeconds(60), CancellationToken.None);
 
             return allCategories;
         }
@@ -69,7 +71,11 @@ namespace PieShop.DataAccess.Repositories
 
             await _pieShopContext.AddAsync(categoryEntity);
 
-            return await _pieShopContext.SaveChangesAsync();
+            int result = await _pieShopContext.SaveChangesAsync();
+
+            await _outputCacheStore.EvictByTagAsync(allCategoriesCacheKey, CancellationToken.None);
+
+            return result;
         }
 
         public async Task<CategoryModel?> GetCategoryByCategoryIdAsync(Guid categoryId)
@@ -120,7 +126,11 @@ namespace PieShop.DataAccess.Repositories
 
                 _pieShopContext.Category.Update(categoryToUpdate);
 
-                return await _pieShopContext.SaveChangesAsync();
+                var result = await _pieShopContext.SaveChangesAsync();
+
+                await _outputCacheStore.EvictByTagAsync(allCategoriesCacheKey, CancellationToken.None);
+
+                return result;
             }
             else
             {
@@ -136,7 +146,11 @@ namespace PieShop.DataAccess.Repositories
             {
                 _pieShopContext.Category.Remove(categoryToDelete);
 
-                return await _pieShopContext.SaveChangesAsync();
+                var result = await _pieShopContext.SaveChangesAsync();
+
+                await _outputCacheStore.EvictByTagAsync(allCategoriesCacheKey, CancellationToken.None);
+
+                return result;
             }
             else
             {
