@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -28,25 +31,101 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
-                    <div class="collapse navbar-collapse" id="navbarCollapse">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <vc:category-menu></vc:category-menu>
-                            <li class="nav-item">
-                                <a asp-controller="Contact" asp-action="Index" class="nav-link">Contact</a>
-                            </li>
-                        </ul>
-                        <ul class="navbar-nav mb-2 mb-lg-0">
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Pie" asp-action="Search">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-                                    </svg>
-                                </a>
-                            </li>
-                        </ul>
-                        <vc:shopping-cart-summary></vc:shopping-cart-summary>
-                        <partial name="_LoginPartial" />
-                    </div>
+                    @if (User != null && User.Identity != null && User.Identity.IsAuthenticated && (await AuthorizationService.AuthorizeAsync(User, "IsAdministrator")).Succeeded) 
+                    {
+                        <div class="collapse navbar-collapse" id="navbarCollapse">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle"
+                                       data-toggle="dropdown"
+                                       href="#"
+                                       role="button"
+                                       data-bs-toggle="dropdown"
+                                       id="nav-dropdown"
+                                       aria-expanded="false">
+                                        Pies
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="nav-dropdown">
+                                        <li>
+                                            <a asp-controller="Pie" asp-action="Paginated" class="dropdown-item">
+                                                View all
+                                            </a>
+                                        </li>                                        
+                                        <li>
+                                            <a asp-controller="Pie" asp-action="Search" class="dropdown-item">
+                                                Search pies
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a asp-controller="Pie" asp-action="Add" class="dropdown-item">
+                                                Add new pie
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle"
+                                       data-toggle="dropdown"
+                                       href="#"
+                                       role="button"
+                                       data-bs-toggle="dropdown"
+                                       id="nav-dropdown"
+                                       aria-expanded="false">
+                                        Categories
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="nav-dropdown">
+                                        <li>
+                                            <a asp-controller="Category" asp-action="Index" class="dropdown-item">
+                                                View all
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a asp-controller="Category" asp-action="BulkEdit" class="dropdown-item">
+                                                Bulk edit
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a asp-controller="Order" asp-action="Index" class="nav-link">
+                                        Orders
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="navbar-nav mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="@Url.Action("Index", "User")">Manage Users</a>
+                                </li>
+                            </ul>
+                            <ul class="navbar-nav mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="@Url.Action("Index", "Role")">Manage Roles</a>
+                                </li>
+                            </ul>
+                        </div>                        
+                    }
+                    else
+                    {
+                        <div class="collapse navbar-collapse" id="navbarCollapse">
+                            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                                <vc:category-menu></vc:category-menu>
+                                <li class="nav-item">
+                                    <a asp-controller="Contact" asp-action="Index" class="nav-link">Contact</a>
+                                </li>
+                            </ul>
+                            <ul class="navbar-nav mb-2 mb-lg-0">
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Pie" asp-action="Search">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                                        </svg>
+                                    </a>
+                                </li>
+                            </ul>
+                            <vc:shopping-cart-summary></vc:shopping-cart-summary>                            
+                        </div>
+                    }
+                    <partial name="_LoginPartial" />
                 </div>
             </nav>
         </header>

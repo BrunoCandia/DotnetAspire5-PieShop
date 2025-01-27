@@ -1,0 +1,58 @@
+﻿@using PieShop.Models.Shared
+@model PaginatedResponse<IEnumerable<Pie>>
+
+<h2>Pies</h2>
+<hr />
+
+@if (!Model.Data.Any())
+{
+    <p>No results</p>
+}
+else
+{
+    <table class="table table-condensed table-bordered">
+        <tr>            
+            <th>
+                <a asp-action="Paginated" asp-route-orderBy="@ViewData["NameSortParam"]">Name</a>
+            </th>
+            <th>
+                <a asp-action="Paginated" asp-route-orderBy="@ViewData["PriceSortParam"]">Price</a>
+            </th>
+            <th>Actions</th>
+        </tr>
+        @foreach (var pie in Model.Data)
+        {
+            <tr>
+                <td>@pie.Name</td>
+                <td>@pie.Price</td>
+                <td>
+                    <a asp-action="Detail" asp-route-pieId="@pie.PieId">Detail</a>
+                    <a asp-action="Edit" asp-route-pieId="@pie.PieId">Edit</a>
+                    <a asp-action="Delete" asp-route-pieId="@pie.PieId">Delete</a>
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Paginated"
+   asp-route-sortBy="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="Paginated"
+   asp-route-sortBy="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   class="btn btn-default @nextDisabled">
+    Next
+</a>
+
+<p>
+    <a class="btn btn-primary" asp-action="Add">Add new pie</a>
+</p>

@@ -14,5 +14,7 @@
         public bool IsInStock { get; set; }
         public Guid CategoryId { get; set; }
         public Category.Category? Category { get; set; }
+        public List<Ingredient>? Ingredients { get; set; } = new List<Ingredient>();
+        public byte[] RowVersion { get; set; } = new byte[8];
     }
 }

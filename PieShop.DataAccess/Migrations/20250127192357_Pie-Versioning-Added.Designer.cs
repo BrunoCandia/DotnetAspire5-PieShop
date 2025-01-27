@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PieShop.DataAccess;
 
@@ -11,9 +12,11 @@ using PieShop.DataAccess;
 namespace PieShop.DataAccess.Migrations
 {
     [DbContext(typeof(PieShopContext))]
-    partial class PieShopContextModelSnapshot : ModelSnapshot
+    [Migration("20250127192357_Pie-Versioning-Added")]
+    partial class PieVersioningAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

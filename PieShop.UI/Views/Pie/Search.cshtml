@@ -1,12 +1,67 @@
-﻿@model PieSearchViewModel
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
-@{
+@model PieSearchViewModel
+
+<h2>Search pies</h2>
+<hr />
+
+<form asp-controller="Pie" asp-action="Search" method="get">
+    <div class="mb-3">
+        <label class="form-label">Category</label>
+        <select asp-for="SearchCategory" asp-items="Model.Categories" class="form-control">
+            <option value="">All</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Search value</label>
+        <input type="text" asp-for="SearchQuery" class="form-control" />
+    </div>
+    <input type="submit" value="Filter" class="btn btn-primary" />
+</form>
+
+@if (!Model.Pies.Any())
+{
+    <p>No results</p>
+}
+else
+{
+    <table class="table table-condensed table-bordered">
+        <tr>            
+            <th>Name</th>
+            <th>Price</th>
+            <th>Actions</th>
+        </tr>
+        @foreach (var pie in Model.Pies)
+        {
+            <tr>                
+                <td>@pie.Name</td>
+                <td>@pie.Price</td>
+                <td>
+                    @if (User != null && User.Identity != null && User.Identity.IsAuthenticated && (await AuthorizationService.AuthorizeAsync(User, "IsAdministrator")).Succeeded)
+                    {
+                        <a asp-action="FullDetail" asp-route-pieId="@pie.PieId">Full Detail</a>
+                        <a asp-action="Edit" asp-route-pieId="@pie.PieId">Edit</a>
+                        <a asp-action="Delete" asp-route-pieId="@pie.PieId">Delete</a>
+                    }
+                    else
+                    {
+                        <a asp-action="Detail" asp-route-pieId="@pie.PieId">Detail</a>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+}
+
+@* Base course *@
+@* @{
     ViewData["Title"] = "Search Pies";
     bool searchPerformed = ViewData["SearchPerformed"] != null && (bool)ViewData["SearchPerformed"];
     string searchQuery = ViewData["CurrentFilter"] as string;
-}
+} *@
 
-<br />
+@* <br />
 <br />
 <br />
 <br />
@@ -51,4 +106,4 @@ Enter your search query:
     {
         <p>No pies found.</p>
     }
-}
+} *@

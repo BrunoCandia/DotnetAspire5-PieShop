@@ -1,4 +1,5 @@
-﻿using PieShop.DataAccess.Data.Entitites.Order;
+﻿using Microsoft.EntityFrameworkCore;
+using PieShop.DataAccess.Data.Entitites.Order;
 using OrderModel = PieShop.Models.Order;
 
 namespace PieShop.DataAccess.Repositories
@@ -79,6 +80,75 @@ namespace PieShop.DataAccess.Repositories
             await _pieShopContext.Order.AddAsync(orderEntity);
 
             await _pieShopContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<OrderModel.Order>> GetAllOrdersWithDetailsAsync()
+        {
+            return await _pieShopContext.Order
+                .AsNoTracking()
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Pie)
+                .OrderBy(o => o.OrderId)
+                .Select(o => new OrderModel.Order
+                {
+                    OrderId = o.OrderId,
+                    FirstName = o.FirstName,
+                    LastName = o.LastName,
+                    AddressLine1 = o.AddressLine1,
+                    AddressLine2 = o.AddressLine2,
+                    ZipCode = o.ZipCode,
+                    City = o.City,
+                    State = o.State,
+                    Country = o.Country,
+                    PhoneNumber = o.PhoneNumber,
+                    Email = o.Email,
+                    OrderTotal = o.OrderTotal,
+                    OrderPlaced = o.OrderPlaced,
+                    OrderDetails = o.OrderDetails.Select(od => new OrderModel.OrderDetail
+                    {
+                        OrderDetailId = od.OrderDetailId,
+                        Amount = od.Amount,
+                        Price = od.Price,
+                        OrderId = o.OrderId,
+                        PieId = od.PieId
+                    }).ToList()
+                })
+                .ToListAsync();
+        }
+
+        public async Task<OrderModel.Order?> GetOrderDetailByOrderIdAsync(Guid orderId)
+        {
+            return await _pieShopContext.Order
+                .AsNoTracking()
+                .Include(o => o.OrderDetails)
+                .ThenInclude(od => od.Pie)
+                .Where(o => o.OrderId == orderId)
+                .OrderBy(o => o.OrderId)
+                .Select(o => new OrderModel.Order
+                {
+                    OrderId = o.OrderId,
+                    FirstName = o.FirstName,
+                    LastName = o.LastName,
+                    AddressLine1 = o.AddressLine1,
+                    AddressLine2 = o.AddressLine2,
+                    ZipCode = o.ZipCode,
+                    City = o.City,
+                    State = o.State,
+                    Country = o.Country,
+                    PhoneNumber = o.PhoneNumber,
+                    Email = o.Email,
+                    OrderTotal = o.OrderTotal,
+                    OrderPlaced = o.OrderPlaced,
+                    OrderDetails = o.OrderDetails.Select(od => new OrderModel.OrderDetail
+                    {
+                        OrderDetailId = od.OrderDetailId,
+                        Amount = od.Amount,
+                        Price = od.Price,
+                        OrderId = o.OrderId,
+                        PieId = od.PieId
+                    }).ToList()
+                })
+                .FirstOrDefaultAsync();
         }
     }
 }

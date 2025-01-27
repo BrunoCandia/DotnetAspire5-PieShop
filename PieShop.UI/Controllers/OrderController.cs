@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PieShop.BusinessLogic;
 using PieShop.Models.Order;
+using PieShop.Models.Pie;
 using PieShop.UI.Models;
 
 namespace PieShop.UI.Controllers
@@ -64,6 +65,37 @@ namespace PieShop.UI.Controllers
             ViewBag.CheckoutCompletedMessage = "Thanks for your order. You'll soon enjoy our delicious pies!";
 
             return View();
+        }
+
+        public async Task<IActionResult> Index(Guid orderId, Guid orderDetailId)
+        {
+            var orderIndexViewModel = new OrderIndexViewModel
+            {
+                Orders = await _orderService.GetAllOrdersWithDetailsAsync()
+            };
+
+            if (orderId != Guid.Empty)
+            {
+                Order selectedOrder = orderIndexViewModel.Orders.Single(o => o.OrderId == orderId);
+                orderIndexViewModel.OrderDetails = selectedOrder.OrderDetails;
+                orderIndexViewModel.SelectedOrderId = orderId;
+            }
+
+            if (orderDetailId != Guid.Empty)
+            {
+                var selectedOrderDetail = orderIndexViewModel.OrderDetails.Single(od => od.OrderDetailId == orderDetailId);
+                orderIndexViewModel.Pies = new List<Pie>() { selectedOrderDetail.Pie };
+                orderIndexViewModel.SelectedOrderDetailId = orderDetailId;
+            }
+
+            return View(orderIndexViewModel);
+        }
+
+        public async Task<IActionResult> Detail(Guid orderId)
+        {
+            var result = await _orderService.GetOrderDetailByOrderIdAsync(orderId);
+
+            return View(result);
         }
     }
 }

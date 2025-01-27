@@ -16,5 +16,15 @@ namespace PieShop.BusinessLogic
         {
             await _orderRepository.CreateOrderAsync(order);
         }
+
+        public async Task<IEnumerable<Order>> GetAllOrdersWithDetailsAsync()
+        {
+            return await _orderRepository.GetAllOrdersWithDetailsAsync();
+        }
+
+        public async Task<Order?> GetOrderDetailByOrderIdAsync(Guid orderId)
+        {
+            return await _orderRepository.GetOrderDetailByOrderIdAsync(orderId);
+        }
     }
 }

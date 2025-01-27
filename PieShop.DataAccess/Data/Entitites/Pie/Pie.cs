@@ -19,6 +19,8 @@ namespace PieShop.DataAccess.Data.Entitites.Pie
         public Guid CategoryId { get; set; }
         ////public required Category.Category Category { get; set; }
         public Category.Category Category { get; set; } = default!;
+        public List<Ingredient>? Ingredients { get; set; }
+        public byte[] RowVersion { get; set; } = new byte[8];
 
         public class PieEntity : IEntityTypeConfiguration<Pie>
         {
@@ -33,6 +35,7 @@ namespace PieShop.DataAccess.Data.Entitites.Pie
                 builder.Property(p => p.Price).HasColumnType("decimal(18,2)");
                 builder.Property(p => p.ImageUrl).HasMaxLength(255);
                 builder.Property(p => p.ImageThumbnailUrl).HasMaxLength(255);
+                builder.Property(p => p.RowVersion).IsRowVersion();
             }
         }
     }
