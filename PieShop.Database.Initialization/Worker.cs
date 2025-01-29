@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -84,7 +85,9 @@ public class Worker : BackgroundService
     {
         using var scope = _serviceProvider.CreateScope();
 
-        var pieShopContext = scope.ServiceProvider.GetRequiredService<PieShopContext>();
+        var services = scope.ServiceProvider;
+
+        var pieShopContext = services.GetRequiredService<PieShopContext>();
 
         await EnsureDatabaseAsync(pieShopContext);
 
@@ -141,6 +144,7 @@ public class Worker : BackgroundService
         {
             // https://github.com/dotnet/efcore/issues/35127
             ////await using var transaction = await pieShopContext.Database.BeginTransactionAsync();
+            await SeedBaseAdministratorUserAsync(pieShopContext);
             await SeedBaseAsync(pieShopContext);
             await pieShopContext.SaveChangesAsync();
             ////await transaction.CommitAsync();
@@ -184,5 +188,41 @@ public class Worker : BackgroundService
         }
 
         Console.WriteLine("Data Seeded");
+    }
+
+    private static async Task SeedBaseAdministratorUserAsync(PieShopContext pieShopContext)
+    {
+        if (!await pieShopContext.Roles.AnyAsync(r => r.Name == "Administrator"))
+        {
+            await pieShopContext.Roles.AddAsync(new IdentityRole { Name = "Administrator", NormalizedName = "ADMINISTRATOR" });
+            await pieShopContext.SaveChangesAsync();
+        }
+
+        if (!await pieShopContext.Users.AnyAsync(u => u.UserName == "admin-user@gmail.com"))
+        {
+            var adminUser = new IdentityUser
+            {
+                UserName = "admin-user@gmail.com",
+                NormalizedUserName = "ADMIN-USER@GMAIL.COM",
+                Email = "admin-user@gmail.com",
+                NormalizedEmail = "ADMIN-USER@GMAIL.COM",
+                EmailConfirmed = false
+            };
+
+            var passwordHasher = new PasswordHasher<IdentityUser>();
+            adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, "Admin@12345");
+
+            await pieShopContext.Users.AddAsync(adminUser);
+            await pieShopContext.SaveChangesAsync();
+        }
+
+        var user = await pieShopContext.Users.FirstOrDefaultAsync(u => u.UserName == "admin-user@gmail.com");
+        var role = await pieShopContext.Roles.FirstOrDefaultAsync(r => r.Name == "Administrator");
+
+        if (user != null && role != null && !await pieShopContext.UserRoles.AnyAsync(ur => ur.UserId == user.Id && ur.RoleId == role.Id))
+        {
+            await pieShopContext.UserRoles.AddAsync(new IdentityUserRole<string> { UserId = user.Id, RoleId = role.Id });
+            await pieShopContext.SaveChangesAsync();
+        }
     }
 }
