@@ -1,3 +1,6 @@
+Default Admin User: admin_user@gmail.com
+Password: Admin@12345
+
 Aspire docs
 https://learn.microsoft.com/en-us/dotnet/aspire/
 
