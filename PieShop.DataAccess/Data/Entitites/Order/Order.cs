@@ -18,7 +18,7 @@ namespace PieShop.DataAccess.Data.Entitites.Order
         public string Email { get; set; } = string.Empty;
         public decimal OrderTotal { get; set; }
         public DateTimeOffset OrderPlaced { get; set; }
-        public List<OrderDetail>? OrderDetails { get; set; }
+        public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
         public class OrderEntity : IEntityTypeConfiguration<Order>
         {
@@ -36,6 +36,11 @@ namespace PieShop.DataAccess.Data.Entitites.Order
                 builder.Property(p => p.Country).HasMaxLength(50);
                 builder.Property(p => p.PhoneNumber).HasMaxLength(25);
                 builder.Property(p => p.Email).HasMaxLength(50);
+
+                // TODO: test this!!!
+                ////builder.HasMany(p => p.OrderDetails)
+                ////    .WithOne(p => p.Order)
+                ////    .HasForeignKey(p => p.OrderId);
             }
         }
     }

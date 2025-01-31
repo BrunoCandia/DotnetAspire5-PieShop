@@ -4,7 +4,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 #region Redis Cache
 
-var cache = builder.AddRedis("outputcache")
+var cache = builder.AddRedis("cache")
         .WithRedisCommander();
 
 #endregion

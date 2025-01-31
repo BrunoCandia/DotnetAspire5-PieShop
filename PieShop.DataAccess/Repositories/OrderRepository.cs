@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using PieShop.DataAccess.Data.Entitites.Order;
+using System.Text.Json;
 using OrderModel = PieShop.Models.Order;
+using PieModel = PieShop.Models.Pie;
 
 namespace PieShop.DataAccess.Repositories
 {
@@ -8,11 +11,15 @@ namespace PieShop.DataAccess.Repositories
     {
         private readonly PieShopContext _pieShopContext;
         private readonly IShoppingCartRepository _shopCartRepository;
+        private readonly IDistributedCache _distributedCache;
 
-        public OrderRepository(PieShopContext pieShopContext, IShoppingCartRepository shopCartRepository)
+        const string allOrdersWithDetailsCacheKey = "allOrdersWithDetails";
+
+        public OrderRepository(PieShopContext pieShopContext, IShoppingCartRepository shopCartRepository, IDistributedCache distributedCache)
         {
             _pieShopContext = pieShopContext;
             _shopCartRepository = shopCartRepository;
+            _distributedCache = distributedCache;
         }
 
         public async Task CreateOrderAsync(OrderModel.Order order)
@@ -80,11 +87,21 @@ namespace PieShop.DataAccess.Repositories
             await _pieShopContext.Order.AddAsync(orderEntity);
 
             await _pieShopContext.SaveChangesAsync();
+
+            await _distributedCache.RemoveAsync(allOrdersWithDetailsCacheKey, CancellationToken.None);
         }
 
         public async Task<IEnumerable<OrderModel.Order>> GetAllOrdersWithDetailsAsync()
         {
-            return await _pieShopContext.Order
+            var cachedOrdersWithDetails = await _distributedCache.GetStringAsync(allOrdersWithDetailsCacheKey);
+
+            if (cachedOrdersWithDetails != null)
+            {
+                var ordersWithDetails = JsonSerializer.Deserialize<List<OrderModel.Order>>(cachedOrdersWithDetails);
+                return ordersWithDetails ?? new List<OrderModel.Order>();
+            }
+
+            var allOrdersWithDetails = await _pieShopContext.Order
                 .AsNoTracking()
                 .Include(o => o.OrderDetails)
                 .ThenInclude(od => od.Pie)
@@ -110,10 +127,27 @@ namespace PieShop.DataAccess.Repositories
                         Amount = od.Amount,
                         Price = od.Price,
                         OrderId = o.OrderId,
-                        PieId = od.PieId
+                        PieId = od.PieId,
+                        Pie = new PieModel.Pie
+                        {
+                            PieId = od.Pie.PieId,
+                            Name = od.Pie.Name,
+                            Price = od.Pie.Price
+                        }
                     }).ToList()
                 })
                 .ToListAsync();
+
+            var serializedOrdersWithDetails = JsonSerializer.Serialize(allOrdersWithDetails);
+
+            var cacheOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(60)
+            };
+
+            await _distributedCache.SetStringAsync(allOrdersWithDetailsCacheKey, serializedOrdersWithDetails, cacheOptions);
+
+            return allOrdersWithDetails;
         }
 
         public async Task<OrderModel.Order?> GetOrderDetailByOrderIdAsync(Guid orderId)
@@ -145,7 +179,13 @@ namespace PieShop.DataAccess.Repositories
                         Amount = od.Amount,
                         Price = od.Price,
                         OrderId = o.OrderId,
-                        PieId = od.PieId
+                        PieId = od.PieId,
+                        Pie = new PieModel.Pie
+                        {
+                            PieId = od.Pie.PieId,
+                            Name = od.Pie.Name,
+                            Price = od.Pie.Price
+                        }
                     }).ToList()
                 })
                 .FirstOrDefaultAsync();

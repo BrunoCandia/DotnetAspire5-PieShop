@@ -29,12 +29,11 @@ builder.Services.AddOutputCache(options =>
     options.AddPolicy("PieDetail", policy => policy.SetVaryByRouteValue("pieId").Expire(TimeSpan.FromSeconds(60)));
 });
 
-////builder.Services.AddStackExchangeRedisOutputCache(options =>
-////{
-////    options.Configuration = "localhost:59163"; // Update the value after running Redis with Podman: Container image "docker.io/library/redis:7.4"
-////});
+// Configure Redis for Distributed Caching
+builder.AddRedisOutputCache("cache");
 
-builder.AddRedisOutputCache("outputcache");
+// Configure Redis for Distributed Caching
+builder.AddRedisDistributedCache("cache");
 
 // Cached responses are stored in Redis
 // https://learn.microsoft.com/en-us/aspnet/core/performance/caching/output?view=aspnetcore-9.0
