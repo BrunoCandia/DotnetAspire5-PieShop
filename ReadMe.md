@@ -23,3 +23,27 @@
 
 ## Blog Post
 - [Introducing the Azure Developer CLI (azd): A Faster Way to Build Apps for the Cloud](https://devblogs.microsoft.com/azure-sdk/introducing-the-azure-developer-cli-a-faster-way-to-build-apps-for-the-cloud/?ocid=AID754288&wt.mc_id=azfr-c9-scottha,CFID0730)
+
+---
+
+## Flows to show
+
+### a) OutputCache in PieController
+1. Do not log.
+2. Click in Shop drop down.
+3. Click in All Pies.
+
+### b) OutputCache in PieController
+1. Log as an admin user.
+2. Click in Pies drop down.
+3. Click in View All.
+4. In Action column, click in Details.
+
+### c) OutputCache in CategoryRepository
+1. Log as an admin user.
+2. Click in Categories drop down.
+3. Click View All.
+
+### d) DistributedCache in OrderRepository
+1. Log as an admin user.
+2. Click in Orders to display the list.

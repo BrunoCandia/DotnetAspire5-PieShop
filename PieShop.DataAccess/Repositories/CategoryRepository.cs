@@ -34,6 +34,9 @@ namespace PieShop.DataAccess.Repositories
                 return categories ?? new List<CategoryModel>();
             }
 
+            // Test OutputCache
+            await Task.Delay(TimeSpan.FromSeconds(3));
+
             var allCategories = await _pieShopContext.Category
                     .AsNoTracking()
                     .Select(category => new CategoryModel

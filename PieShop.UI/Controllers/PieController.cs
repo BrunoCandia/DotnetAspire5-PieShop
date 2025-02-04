@@ -24,7 +24,7 @@ namespace PieShop.UI.Controllers
         public async Task<ViewResult> List(string category)
         {
             // Test OutputCache
-            await Task.Delay(TimeSpan.FromSeconds(5));
+            await Task.Delay(TimeSpan.FromSeconds(3));
 
             IEnumerable<Pie> pies;
             string? currentCategory;
@@ -50,7 +50,7 @@ namespace PieShop.UI.Controllers
         public async Task<ActionResult> Detail(Guid pieId)
         {
             // Test OutputCache
-            await Task.Delay(TimeSpan.FromSeconds(5));
+            await Task.Delay(TimeSpan.FromSeconds(3));
 
             if (pieId == Guid.Empty)
             {

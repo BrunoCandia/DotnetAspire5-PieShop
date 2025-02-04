@@ -101,6 +101,9 @@ namespace PieShop.DataAccess.Repositories
                 return ordersWithDetails ?? new List<OrderModel.Order>();
             }
 
+            // Test DistributedCache
+            await Task.Delay(TimeSpan.FromSeconds(3));
+
             var allOrdersWithDetails = await _pieShopContext.Order
                 .AsNoTracking()
                 .Include(o => o.OrderDetails)

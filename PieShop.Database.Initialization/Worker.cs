@@ -196,6 +196,8 @@ public class Worker : BackgroundService
         {
             await pieShopContext.Roles.AddAsync(new IdentityRole { Name = "Administrator", NormalizedName = "ADMINISTRATOR" });
             await pieShopContext.SaveChangesAsync();
+
+            Console.WriteLine("Seeding Base Role...");
         }
 
         if (!await pieShopContext.Users.AnyAsync(u => u.UserName == "admin_user@gmail.com"))
@@ -214,6 +216,8 @@ public class Worker : BackgroundService
 
             await pieShopContext.Users.AddAsync(adminUser);
             await pieShopContext.SaveChangesAsync();
+
+            Console.WriteLine("Seeding Base Admin User...");
         }
 
         var user = await pieShopContext.Users.FirstOrDefaultAsync(u => u.UserName == "admin_user@gmail.com");
@@ -223,6 +227,8 @@ public class Worker : BackgroundService
         {
             await pieShopContext.UserRoles.AddAsync(new IdentityUserRole<string> { UserId = user.Id, RoleId = role.Id });
             await pieShopContext.SaveChangesAsync();
+
+            Console.WriteLine("Seeding Base UserRole...");
         }
     }
 }
