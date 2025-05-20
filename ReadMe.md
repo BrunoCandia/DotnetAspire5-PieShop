@@ -2,6 +2,9 @@
 **Email:** admin_user@gmail.com  
 **Password:** `Admin@12345`
 
+# MS SQL Server
+**Password:** `P@ssword1`
+
 ---
 
 ## Aspire Docs
