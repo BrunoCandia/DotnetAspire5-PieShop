@@ -1,15 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" Version="9.2.1" />
-    <PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="9.2.1" />
-    <PackageReference Include="Aspire.StackExchange.Redis.OutputCaching" Version="9.2.1" />
+    <PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" Version="9.3.0" />
+    <PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="9.3.0" />
+    <PackageReference Include="Aspire.StackExchange.Redis.OutputCaching" Version="9.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="9.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5">
       <PrivateAssets>all</PrivateAssets>
@@ -17,10 +15,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\PieShop.BusinessLogic\PieShop.BusinessLogic.csproj" />
     <ProjectReference Include="..\PieShop.ServiceDefaults\PieShop.ServiceDefaults.csproj" />
   </ItemGroup>
-
 </Project>
