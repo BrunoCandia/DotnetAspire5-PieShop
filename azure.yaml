@@ -1,0 +1,8 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: dotnetaspire5-pieshop
+services:  
+  app:
+    language: dotnet
+    project: ./PieShop.AppHost/PieShop.AppHost.csproj
+    host: containerapp

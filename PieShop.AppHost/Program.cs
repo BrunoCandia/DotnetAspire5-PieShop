@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 var builder = DistributedApplication.CreateBuilder(args);
 
 #region Redis Cache
@@ -11,57 +9,57 @@ var cache = builder.AddRedis("cache")
 
 #region SQL Server Database
 
-Func<ExecuteCommandContext, Task<ExecuteCommandResult>> myFunc = async (context) =>
-{
+////Func<ExecuteCommandContext, Task<ExecuteCommandResult>> myFunc = async (context) =>
+////{
 
-    try
-    {
-        // Ejecutar el comando usando Bash
-        Process process = new Process
-        {
-            StartInfo = new ProcessStartInfo
-            {
-                FileName = "/bin/bash",
-                Arguments = "-c \"chown -R mssql:mssql /var/opt/mssql && /opt/mssql/bin/sqlservr\"",
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true
-            }
-        };
+////    try
+////    {
+////        // Ejecutar el comando usando Bash
+////        Process process = new Process
+////        {
+////            StartInfo = new ProcessStartInfo
+////            {
+////                FileName = "/bin/bash",
+////                Arguments = "-c \"chown -R mssql:mssql /var/opt/mssql && /opt/mssql/bin/sqlservr\"",
+////                RedirectStandardOutput = true,
+////                RedirectStandardError = true,
+////                UseShellExecute = false,
+////                CreateNoWindow = true
+////            }
+////        };
 
-        process.Start();
+////        process.Start();
 
-        string output = await process.StandardOutput.ReadToEndAsync();
-        string error = await process.StandardError.ReadToEndAsync();
+////        string output = await process.StandardOutput.ReadToEndAsync();
+////        string error = await process.StandardError.ReadToEndAsync();
 
-        await process.WaitForExitAsync();
+////        await process.WaitForExitAsync();
 
-        // Verificar el código de salida
-        if (process.ExitCode != 0)
-        {
-            return new ExecuteCommandResult
-            {
-                Success = false,
-                ErrorMessage = $"Command failed with error: {error}"
-            };
-        }
+////        // Verificar el código de salida
+////        if (process.ExitCode != 0)
+////        {
+////            return new ExecuteCommandResult
+////            {
+////                Success = false,
+////                ErrorMessage = $"Command failed with error: {error}"
+////            };
+////        }
 
-        return new ExecuteCommandResult
-        {
-            Success = true,
-            ErrorMessage = $"Command executed successfully: {output}"
-        };
-    }
-    catch (Exception ex)
-    {
-        return new ExecuteCommandResult
-        {
-            Success = false,
-            ErrorMessage = $"Exception occurred: {ex.Message}"
-        };
-    }
-};
+////        return new ExecuteCommandResult
+////        {
+////            Success = true,
+////            ErrorMessage = $"Command executed successfully: {output}"
+////        };
+////    }
+////    catch (Exception ex)
+////    {
+////        return new ExecuteCommandResult
+////        {
+////            Success = false,
+////            ErrorMessage = $"Exception occurred: {ex.Message}"
+////        };
+////    }
+////};
 
 var sqlPassword = builder.AddParameter("sqlPassword", secret: true);
 var sqlServer = builder.AddSqlServer("sql-server", password: sqlPassword, port: 56043)
