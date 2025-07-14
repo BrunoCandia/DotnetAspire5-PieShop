@@ -1,6 +1,65 @@
-# Default Admin User
-**Email:** admin_user@gmail.com  
-**Password:** `Admin@12345`
+## Flows to show
+
+### a) OutputCache in PieController
+1. Do not log.
+2. Click in Shop drop down.
+3. Click in All Pies.
+
+### b) OutputCache in PieController
+1. Log as an admin user.
+2. Click in Pies drop down.
+3. Click in View All.
+4. In Action column, click in Details.
+
+### c) OutputCache in CategoryRepository
+1. Log as an admin user.
+2. Click in Categories drop down.
+3. Click View All.
+
+### d) DistributedCache in OrderRepository
+1. Log as an admin user.
+2. Click in Orders to display the list.
+
+---
+
+## Running the App with .NET Aspire
+
+Follow these steps to run the application using .NET Aspire:
+
+1. **Install .NET Aspire Workload**
+   - Make sure you have the latest .NET 9 SDK installed.
+   - Install the Aspire workload if you haven't already: 
+ ```
+ dotnet workload install aspire
+ ```
+2. **Restore Dependencies**
+   - Restore all NuGet packages:
+```
+     dotnet restore
+```
+3. **Run the Aspire AppHost Project**
+   - The entry point for Aspire orchestration is the `PieShop.AppHost` project. Run it with: ```sh
+ dotnet run --project PieShop.AppHost/PieShop.AppHost.csproj
+    - This will start all required services, including the UI, database, and any background workers, as defined in the Aspire AppHost.
+
+4. **Access the Application**
+   - Once started, the Aspire dashboard will provide links to the running services (such as the UI and APIs). Follow the provided URLs to access the PieShop app.
+
+5. **Stopping the App**
+   - Press `Ctrl+C` in the terminal to stop all services.
+
+---
+
+For more details, see the [Microsoft Aspire Documentation](https://learn.microsoft.com/en-us/dotnet/aspire/).
+
+## Sample Users
+
+| Role              | Email                 | Password      |
+|-------------------|-----------------------|---------------|
+| Customer          | To be done            | To be done    |
+| Administrator     | admin_user@gmail.com  | Admin@12345   |
+
+---
 
 # MS SQL Server
 **Password:** `P@ssword1`
@@ -28,25 +87,3 @@
 - [Introducing the Azure Developer CLI (azd): A Faster Way to Build Apps for the Cloud](https://devblogs.microsoft.com/azure-sdk/introducing-the-azure-developer-cli-a-faster-way-to-build-apps-for-the-cloud/?ocid=AID754288&wt.mc_id=azfr-c9-scottha,CFID0730)
 
 ---
-
-## Flows to show
-
-### a) OutputCache in PieController
-1. Do not log.
-2. Click in Shop drop down.
-3. Click in All Pies.
-
-### b) OutputCache in PieController
-1. Log as an admin user.
-2. Click in Pies drop down.
-3. Click in View All.
-4. In Action column, click in Details.
-
-### c) OutputCache in CategoryRepository
-1. Log as an admin user.
-2. Click in Categories drop down.
-3. Click View All.
-
-### d) DistributedCache in OrderRepository
-1. Log as an admin user.
-2. Click in Orders to display the list.
