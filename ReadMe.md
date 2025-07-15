@@ -61,8 +61,22 @@ For more details, see the [Microsoft Aspire Documentation](https://learn.microso
 
 ---
 
-# MS SQL Server
-**Password:** `P@ssword1`
+# Connect to Microsoft SQL Server
+1. **Server type**
+   - Database Engine
+
+2. **Server name**
+   - Option 1: 127.0.0.1,56043
+   - Option 2: localhost,56043
+   
+3. **Authentication**
+   - SQL Server Authentication
+
+4. **Login**
+   - sa
+
+5. **Password**
+   - P@ssword1
 
 ---
 
