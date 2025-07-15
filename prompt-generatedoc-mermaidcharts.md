@@ -52,7 +52,7 @@
 5. **(Optional, only if user confirms)**: Use Playwright MCP server tools to:
    - Capture a screenshot of the Aspire dashboard.
    - Capture a screenshot of the main frontend page.
-   - If Playwright MCP server tools can't launch the app, ask the user for the correct Aspire launch URL. By default, use: https://localhost:17187
+   - If Playwright MCP server tools can't launch the app, ask the user for the correct Aspire launch URL. By default, use: https://localhost:17225
    - **All screenshots must be saved in the `docs/screenshots` folder. If the `docs/screenshots` folder does not exist, it must be created.**
 
 **Instructions:**
