@@ -115,13 +115,24 @@ app.MapStaticAssets();
 
 app.MapControllerRoute(
         name: "pieList",
-        pattern: "pie/{action=List}",
-        defaults: new { controller = "pie" });
+        pattern: "pie/List",
+        defaults: new { controller = "pie", action = "List" });
 
 app.MapControllerRoute(
     name: "pieDetail",
     pattern: "pie/{action=Detail}/{pieId}",
     defaults: new { controller = "pie" });
+
+app.MapControllerRoute(
+    name: "categoryIndex",
+    pattern: "category/Index",
+    defaults: new { controller = "Category", action = "Index" });
+
+
+app.MapControllerRoute(
+    name: "orderIndex",
+    pattern: "order/Index",
+    defaults: new { controller = "Order", action = "Index" });
 
 app.MapControllerRoute(
     name: "orderCheckout",

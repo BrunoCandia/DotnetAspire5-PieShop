@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Text;
 using System.Text.Json;
 using CategoryEntity = PieShop.DataAccess.Data.Entitites.Category.Category;
@@ -12,15 +13,17 @@ namespace PieShop.DataAccess.Repositories
     {
         private readonly PieShopContext _pieShopContext;
         private readonly IOutputCacheStore _outputCacheStore;
+        private readonly ILogger<CategoryRepository> _logger;
 
         private readonly string[] _tagsArray = new string[] { allCategoriesCacheKey };
 
         const string allCategoriesCacheKey = "allCategories";
 
-        public CategoryRepository(PieShopContext pieShopContext, IOutputCacheStore outputCacheStore)
+        public CategoryRepository(PieShopContext pieShopContext, IOutputCacheStore outputCacheStore, ILogger<CategoryRepository> logger)
         {
             _pieShopContext = pieShopContext;
             _outputCacheStore = outputCacheStore;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<CategoryModel>> GetAllCategoriesAsync()
@@ -29,13 +32,15 @@ namespace PieShop.DataAccess.Repositories
 
             if (cachedCategories != null)
             {
+                _logger.LogInformation("Using cached categories");
                 var categories = JsonSerializer.Deserialize<List<CategoryModel>>(cachedCategories);
-
                 return categories ?? new List<CategoryModel>();
             }
 
             // Test OutputCache
             await Task.Delay(TimeSpan.FromSeconds(3));
+
+            _logger.LogInformation("Fetching categories from the database");
 
             var allCategories = await _pieShopContext.Category
                     .AsNoTracking()
@@ -53,6 +58,8 @@ namespace PieShop.DataAccess.Repositories
             var encodedCategories = Encoding.UTF8.GetBytes(serializedCategories);
 
             await _outputCacheStore.SetAsync(allCategoriesCacheKey, encodedCategories, _tagsArray, TimeSpan.FromSeconds(60), CancellationToken.None);
+
+            _logger.LogInformation("Caching {Count} categories", allCategories.Count);
 
             return allCategories;
         }
@@ -75,6 +82,8 @@ namespace PieShop.DataAccess.Repositories
             await _pieShopContext.AddAsync(categoryEntity);
 
             int result = await _pieShopContext.SaveChangesAsync();
+
+            _logger.LogInformation("Cache evicted for all categories after adding a new category.");
 
             await _outputCacheStore.EvictByTagAsync(allCategoriesCacheKey, CancellationToken.None);
 

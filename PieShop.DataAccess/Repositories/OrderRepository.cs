@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using PieShop.DataAccess.Data.Entitites.Order;
 using System.Text.Json;
 using OrderModel = PieShop.Models.Order;
@@ -12,14 +13,16 @@ namespace PieShop.DataAccess.Repositories
         private readonly PieShopContext _pieShopContext;
         private readonly IShoppingCartRepository _shopCartRepository;
         private readonly IDistributedCache _distributedCache;
+        private readonly ILogger<OrderRepository> _logger;
 
         const string allOrdersWithDetailsCacheKey = "allOrdersWithDetails";
 
-        public OrderRepository(PieShopContext pieShopContext, IShoppingCartRepository shopCartRepository, IDistributedCache distributedCache)
+        public OrderRepository(PieShopContext pieShopContext, IShoppingCartRepository shopCartRepository, IDistributedCache distributedCache, ILogger<OrderRepository> logger)
         {
             _pieShopContext = pieShopContext;
             _shopCartRepository = shopCartRepository;
             _distributedCache = distributedCache;
+            _logger = logger;
         }
 
         public async Task CreateOrderAsync(OrderModel.Order order)
@@ -97,12 +100,15 @@ namespace PieShop.DataAccess.Repositories
 
             if (cachedOrdersWithDetails != null)
             {
+                _logger.LogInformation("Using cached orders with details.");
                 var ordersWithDetails = JsonSerializer.Deserialize<List<OrderModel.Order>>(cachedOrdersWithDetails);
                 return ordersWithDetails ?? new List<OrderModel.Order>();
             }
 
             // Test DistributedCache
             await Task.Delay(TimeSpan.FromSeconds(3));
+
+            _logger.LogInformation("Fetching orders with details from the database.");
 
             var allOrdersWithDetails = await _pieShopContext.Order
                 .AsNoTracking()
@@ -149,6 +155,8 @@ namespace PieShop.DataAccess.Repositories
             };
 
             await _distributedCache.SetStringAsync(allOrdersWithDetailsCacheKey, serializedOrdersWithDetails, cacheOptions);
+
+            _logger.LogInformation("Caching {Count} orders with details", allOrdersWithDetails.Count);
 
             return allOrdersWithDetails;
         }

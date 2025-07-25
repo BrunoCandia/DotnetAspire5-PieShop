@@ -61,6 +61,14 @@ For more details, see the [Microsoft Aspire Documentation](https://learn.microso
 
 ---
 
+# Redis Commander
+
+KEYS *
+
+GET "aspnetcore-outputcache:209b0e81-29f7-5662-c713-0d64fbc6b88e"
+
+---
+
 # Connect to Microsoft SQL Server
 1. **Server type**
    - Database Engine

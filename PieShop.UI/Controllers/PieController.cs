@@ -13,18 +13,22 @@ namespace PieShop.UI.Controllers
         private readonly IPieService _pieService;
         private readonly ICategoryService _categoryService;
         private readonly int pageSize = 5;
+        private readonly ILogger<PieController> _logger;
 
-        public PieController(ICategoryService categoryService, IPieService pieService)
+        public PieController(ICategoryService categoryService, IPieService pieService, ILogger<PieController> logger)
         {
             _categoryService = categoryService;
             _pieService = pieService;
+            _logger = logger;
         }
 
         [OutputCache(PolicyName = "PieList")]
         public async Task<ViewResult> List(string category)
         {
             // Test OutputCache
-            await Task.Delay(TimeSpan.FromSeconds(3));
+            await Task.Delay(TimeSpan.FromSeconds(5));
+
+            _logger.LogInformation("5 seconds delayed for fetching pies for category");
 
             IEnumerable<Pie> pies;
             string? currentCategory;
@@ -50,7 +54,9 @@ namespace PieShop.UI.Controllers
         public async Task<ActionResult> Detail(Guid pieId)
         {
             // Test OutputCache
-            await Task.Delay(TimeSpan.FromSeconds(3));
+            await Task.Delay(TimeSpan.FromSeconds(5));
+
+            _logger.LogInformation("5 seconds delayed for fetching pie details");
 
             if (pieId == Guid.Empty)
             {

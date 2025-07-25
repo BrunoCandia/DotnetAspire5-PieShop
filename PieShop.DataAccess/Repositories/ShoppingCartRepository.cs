@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PieShop.DataAccess.Data.Entitites.ShoppingCart;
 using PieModel = PieShop.Models.Pie;
 using ShoppingCartItemModel = PieShop.Models.ShoppingCart;
@@ -10,13 +11,15 @@ namespace PieShop.DataAccess.Repositories
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PieShopContext _pieShopContext;
+        private readonly ILogger<ShoppingCartRepository> _logger;
 
         private string? ShoppingCartId { get; set; }
 
-        public ShoppingCartRepository(PieShopContext pieShopContext, IHttpContextAccessor httpContextAccessor)
+        public ShoppingCartRepository(PieShopContext pieShopContext, IHttpContextAccessor httpContextAccessor, ILogger<ShoppingCartRepository> logger)
         {
             _pieShopContext = pieShopContext;
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
 
             GetAndSetShoppingCartId();
         }
@@ -122,6 +125,8 @@ namespace PieShop.DataAccess.Repositories
 
         public async Task<List<ShoppingCartItemModel.ShoppingCartItem>> GetShoppingCartItemsAsync()
         {
+            _logger.LogInformation("Getting shopping cart items for ShoppingCartId: {ShoppingCartId}", ShoppingCartId);
+
             return await _pieShopContext.ShoppingCartItem
                            .AsNoTracking()
                            .Where(c => c.ShoppingCartId == ShoppingCartId)
@@ -156,6 +161,8 @@ namespace PieShop.DataAccess.Repositories
                     .Where(c => c.ShoppingCartId == ShoppingCartId)
                     .Select(c => c.Pie.Price * c.Amount)
                     .SumAsync();
+
+            _logger.LogInformation("Total for ShoppingCartId {ShoppingCartId} is {Total}", ShoppingCartId, total);
 
             return total;
         }
