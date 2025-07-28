@@ -80,39 +80,6 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
-////app.MapControllerRoute(
-////    name: "default",
-////    pattern: "{controller=Home}/{action=Index}/{id?}")
-////    .WithStaticAssets();
-
-// The order matters. The middleware to support MVC routing
-////app.UseEndpoints(endpoints =>
-////{
-////    endpoints.MapControllerRoute(
-////        name: "pieList",
-////        pattern: "pie/{action=List}",
-////        defaults: new { controller = "pie" });
-
-////    endpoints.MapControllerRoute(
-////        name: "pieDetail",
-////        pattern: "pie/{action=Detail}/{pieId}",
-////        defaults: new { controller = "pie" });
-
-////    endpoints.MapControllerRoute(
-////        name: "orderCheckout",
-////        pattern: "order/{action=Checkout}",
-////        defaults: new { controller = "order" });
-
-////    endpoints.MapControllerRoute(
-////        name: "orderCheckoutCompleted",
-////        pattern: "order/{action=CheckoutCompleted}",
-////        defaults: new { controller = "order" });
-
-////    endpoints.MapControllerRoute(
-////        name: "default",
-////        pattern: "{controller=Home}/{action=Index}/{id?}");
-////});
-
 #region Pie Controller Routes
 
 // List pies, optionally by category
