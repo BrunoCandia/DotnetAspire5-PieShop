@@ -199,7 +199,7 @@ namespace PieShop.UI.Controllers
                     };
 
                     await _pieService.AddPieAsync(pie);
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("List");
                 }
             }
             catch (Exception ex)
@@ -250,7 +250,7 @@ namespace PieShop.UI.Controllers
                 {
                     await _pieService.UpdatePieAsync(pie);
 
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("List");
                 }
                 else
                 {
@@ -355,7 +355,7 @@ namespace PieShop.UI.Controllers
 
                 TempData["PieDeleted"] = "Pie deleted successfully!";
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("List");
             }
             catch (Exception ex)
             {
