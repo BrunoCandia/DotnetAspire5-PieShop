@@ -25,6 +25,7 @@ namespace PieShop.UI.Controllers
 
         public IActionResult Add()
         {
+            Console.WriteLine("Add Category action called");
             return View();
         }
 
@@ -69,7 +70,6 @@ namespace PieShop.UI.Controllers
 
         public async Task<IActionResult> Edit(Guid categoryId)
         {
-
             if (categoryId == Guid.Empty)
             {
                 return BadRequest();
@@ -105,7 +105,7 @@ namespace PieShop.UI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Delete(Guid categoryId, bool? isdummy)
+        public async Task<IActionResult> Delete(Guid categoryId)
         {
             var selectedCategory = await _categoryService.GetCategoryByCategoryIdAsync(categoryId);
 
@@ -137,7 +137,6 @@ namespace PieShop.UI.Controllers
             var selectedCategory = await _categoryService.GetCategoryByCategoryIdAsync(categoryId);
 
             return View(selectedCategory);
-
         }
     }
 }

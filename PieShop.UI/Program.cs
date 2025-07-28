@@ -123,11 +123,45 @@ app.MapControllerRoute(
     pattern: "pie/{action=Detail}/{pieId}",
     defaults: new { controller = "pie" });
 
+#region Category Controller Routes
+
 app.MapControllerRoute(
     name: "categoryIndex",
     pattern: "category/Index",
     defaults: new { controller = "Category", action = "Index" });
 
+// This route is used to add a new category in GET and POST methods
+app.MapControllerRoute(
+    name: "categoryAdd",
+    pattern: "category/Add",
+    defaults: new { controller = "Category", action = "Add" });
+
+app.MapControllerRoute(
+    name: "categoryDetail",
+    pattern: "category/Detail/{categoryId:guid}",
+    defaults: new { controller = "Category", action = "Detail" });
+
+app.MapControllerRoute(
+    name: "categoryEdit",
+    pattern: "category/Edit/{categoryId:guid}",
+    defaults: new { controller = "Category", action = "Edit" });
+
+app.MapControllerRoute(
+    name: "categoryEditPost",
+    pattern: "category/Edit",
+    defaults: new { controller = "Category", action = "Edit" });
+
+app.MapControllerRoute(
+    name: "categoryDelete",
+    pattern: "category/Delete/{categoryId:guid}",
+    defaults: new { controller = "Category", action = "Delete" });
+
+app.MapControllerRoute(
+    name: "categoryPostDelete",
+    pattern: "category/PostDelete",
+    defaults: new { controller = "Category", action = "PostDelete" });
+
+#endregion
 
 app.MapControllerRoute(
     name: "orderIndex",
