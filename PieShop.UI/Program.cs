@@ -276,6 +276,15 @@ app.MapControllerRoute(
 
 #endregion
 
+#region User Controller Routes
+
+app.MapControllerRoute(
+    name: "userIndex",
+    pattern: "user/Index",
+    defaults: new { controller = "User", action = "Index" });
+
+#endregion
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
