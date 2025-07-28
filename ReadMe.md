@@ -54,10 +54,10 @@ For more details, see the [Microsoft Aspire Documentation](https://learn.microso
 
 ## Sample Users
 
-| Role              | Email                 | Password      |
-|-------------------|-----------------------|---------------|
-| Customer          | To be done            | To be done    |
-| Administrator     | admin_user@gmail.com  | Admin@12345   |
+| Role              | Email                 | Password       |
+|-------------------|-----------------------|----------------|
+| Customer          | customer@gmail.com    | Customer@12345 |
+| Administrator     | admin_user@gmail.com  | Admin@12345    |
 
 ---
 
