@@ -248,6 +248,34 @@ app.MapControllerRoute(
 
 #endregion
 
+#region Role Controller Routes
+
+// Role index
+app.MapControllerRoute(
+    name: "roleIndex",
+    pattern: "role/Index",
+    defaults: new { controller = "Role", action = "Index" });
+
+// Create role (GET and POST)
+app.MapControllerRoute(
+    name: "roleCreate",
+    pattern: "role/Create",
+    defaults: new { controller = "Role", action = "Create" });
+
+// Assign role (GET and POST)
+app.MapControllerRoute(
+    name: "roleAssign",
+    pattern: "role/Assign",
+    defaults: new { controller = "Role", action = "Assign" });
+
+// Remove role (POST)
+app.MapControllerRoute(
+    name: "roleRemoveRole",
+    pattern: "role/RemoveRole",
+    defaults: new { controller = "Role", action = "RemoveRole" });
+
+#endregion
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

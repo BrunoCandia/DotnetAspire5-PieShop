@@ -23,6 +23,7 @@ namespace PieShop.UI.Controllers
 
         public IActionResult Create()
         {
+            Console.WriteLine("Create role action called");
             return View();
         }
 
