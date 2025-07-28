@@ -218,20 +218,35 @@ app.MapControllerRoute(
 
 #endregion
 
+#region Order Controller Routes
+
+// Order index, optionally with orderId and orderDetailId as query parameters
+// query parameters sample: /order/Index?orderId=11111111-1111-1111-1111-111111111111&orderDetailId=22222222-2222-2222-2222-222222222222
 app.MapControllerRoute(
     name: "orderIndex",
     pattern: "order/Index",
     defaults: new { controller = "Order", action = "Index" });
 
+// Order checkout (GET and POST)
 app.MapControllerRoute(
     name: "orderCheckout",
-    pattern: "order/{action=Checkout}",
-    defaults: new { controller = "order" });
+    pattern: "order/Checkout",
+    defaults: new { controller = "order", action = "Checkout" });
 
+// Order checkout completed (GET)
 app.MapControllerRoute(
     name: "orderCheckoutCompleted",
-    pattern: "order/{action=CheckoutCompleted}",
-    defaults: new { controller = "order" });
+    pattern: "order/CheckoutCompleted",
+    defaults: new { controller = "order", action = "CheckoutCompleted" });
+
+// Order detail by orderId
+// route parameters sample: /order/Detail/11111111-1111-1111-1111-111111111111
+app.MapControllerRoute(
+    name: "orderDetail",
+    pattern: "order/Detail/{orderId:guid}",
+    defaults: new { controller = "Order", action = "Detail" });
+
+#endregion
 
 app.MapControllerRoute(
     name: "default",
